@@ -34,11 +34,19 @@ btnsOpenModal.forEach((btn) => {
 btnCloseModal.addEventListener('click', closeModal);
 
 // Event Listener: Close modal on overlaty click
-
 overlay.addEventListener('click', closeModal);
+
 // Event Listener: Close modal on escape key press
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
         closeModal();
     }
+});
+
+// Event Listener: Lean more btn click
+const btnScrollTo = document.querySelector('.btn--scroll-to'),
+    section1 = document.getElementById('section--1');
+
+btnScrollTo.addEventListener('click', () => {
+    section1.scrollIntoView({ behavior: 'smooth' });
 });
