@@ -10,7 +10,8 @@ const modal = document.querySelector('.modal'),
 // // FUNCTIONS // //
 // ------------------- //
 // Function: Open modal
-const openModal = () => {
+const openModal = (e) => {
+    e.preventDefault();
     modal.classList.remove('hidden');
     overlay.classList.remove('hidden');
 };
