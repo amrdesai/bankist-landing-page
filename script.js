@@ -11,7 +11,8 @@ const modal = document.querySelector('.modal'),
     tabs = document.querySelectorAll('.operations__tab'),
     tabsContainer = document.querySelector('.operations__tab-container'),
     tabsContent = document.querySelectorAll('.operations__content'),
-    navEl = document.querySelector('.nav');
+    navEl = document.querySelector('.nav'),
+    headerEl = document.querySelector('.header');
 
 // ------------------- //
 // // FUNCTIONS // //
@@ -103,3 +104,17 @@ const handleHover = (event, opacity) => {
 
 navEl.addEventListener('mouseover', (e) => handleHover(e, 0.5));
 navEl.addEventListener('mouseout', (e) => handleHover(e, 1));
+
+// Event Listener: Sticky Navigation using Intersection Observer API
+const navHeight = navEl.getBoundingClientRect().height;
+const stickyNav = (entries) => {
+    const [entry] = entries;
+    if (!entry.isIntersecting) navEl.classList.add('sticky');
+    else navEl.classList.remove('sticky');
+};
+const headerObserver = new IntersectionObserver(stickyNav, {
+    root: null,
+    threshold: 0,
+    rootMargin: `-${navHeight}px`,
+});
+headerObserver.observe(headerEl);
