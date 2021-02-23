@@ -7,7 +7,11 @@ const modal = document.querySelector('.modal'),
     btnsOpenModal = document.querySelectorAll('.btn--show-modal'),
     btnScrollTo = document.querySelector('.btn--scroll-to'),
     section1 = document.getElementById('section--1'),
-    navLinks = document.querySelector('.nav__links');
+    navLinks = document.querySelector('.nav__links'),
+    tabs = document.querySelectorAll('.operations__tab'),
+    tabsContainer = document.querySelector('.operations__tab-container'),
+    tabsContent = document.querySelectorAll('.operations__content'),
+    navEl = document.querySelector('.nav');
 
 // ------------------- //
 // // FUNCTIONS // //
@@ -63,10 +67,6 @@ navLinks.addEventListener('click', function (e) {
 });
 
 // Event Listener: Tabbed componenet
-const tabs = document.querySelectorAll('.operations__tab');
-const tabsContainer = document.querySelector('.operations__tab-container');
-const tabsContent = document.querySelectorAll('.operations__content');
-
 tabsContainer.addEventListener('click', function (e) {
     const clicked = e.target.closest('.operations__tab');
 
@@ -85,3 +85,21 @@ tabsContainer.addEventListener('click', function (e) {
         .querySelector(`.operations__content--${clicked.dataset.tab}`)
         .classList.add('operations__content--active');
 });
+
+// Event Listener & Function: Nav menu fade animation
+const handleHover = (event, opacity) => {
+    if (event.target.classList.contains('nav__link')) {
+        const link = event.target;
+        const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+        const logo = link.closest('.nav').querySelector('img');
+
+        // Change opacity
+        siblings.forEach((el) => {
+            if (el !== link) el.style.opacity = opacity;
+        });
+        logo.style.opacity = opacity;
+    }
+};
+
+navEl.addEventListener('mouseover', (e) => handleHover(e, 0.5));
+navEl.addEventListener('mouseout', (e) => handleHover(e, 1));
