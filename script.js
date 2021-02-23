@@ -12,7 +12,8 @@ const modal = document.querySelector('.modal'),
     tabsContainer = document.querySelector('.operations__tab-container'),
     tabsContent = document.querySelectorAll('.operations__content'),
     navEl = document.querySelector('.nav'),
-    headerEl = document.querySelector('.header');
+    headerEl = document.querySelector('.header'),
+    allSectionsEl = document.querySelectorAll('.section');
 
 // ------------------- //
 // // FUNCTIONS // //
@@ -118,3 +119,21 @@ const headerObserver = new IntersectionObserver(stickyNav, {
     rootMargin: `-${navHeight}px`,
 });
 headerObserver.observe(headerEl);
+
+// Event Listener: Section load/reveal animation
+const revealSection = (entries, observer) => {
+    const [entry] = entries;
+    if (!entry.isIntersecting) return;
+    entry.target.classList.remove('section--hidden');
+    observer.unobserve(entry.target);
+};
+
+const sectionObserver = new IntersectionObserver(revealSection, {
+    root: null,
+    threshold: 0.15,
+});
+
+allSectionsEl.forEach((sec) => {
+    sectionObserver.observe(sec);
+    sec.classList.add('section--hidden');
+});
