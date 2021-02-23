@@ -61,3 +61,27 @@ navLinks.addEventListener('click', function (e) {
         document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
     }
 });
+
+// Event Listener: Tabbed componenet
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+
+tabsContainer.addEventListener('click', function (e) {
+    const clicked = e.target.closest('.operations__tab');
+
+    // Guard clause
+    if (!clicked) return;
+
+    // Remove active class from every tab & Add active class to selected btn
+    tabs.forEach((tab) => tab.classList.remove('operations__tab--active'));
+    clicked.classList.add('operations__tab--active');
+
+    // Remove all active content & Add active class to selected content
+    tabsContent.forEach((content) =>
+        content.classList.remove('operations__content--active')
+    );
+    document
+        .querySelector(`.operations__content--${clicked.dataset.tab}`)
+        .classList.add('operations__content--active');
+});
