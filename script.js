@@ -1,22 +1,28 @@
 'use strict';
 
 // Variables/selectors
-const modal = document.querySelector('.modal'),
+const modal = document.querySelector('.modal'), // modal (open account btn)
     overlay = document.querySelector('.overlay'),
     btnCloseModal = document.querySelector('.btn--close-modal'),
     btnsOpenModal = document.querySelectorAll('.btn--show-modal'),
     btnScrollTo = document.querySelector('.btn--scroll-to'),
-    section1 = document.getElementById('section--1'),
+    // Navbar
     navLinks = document.querySelector('.nav__links'),
+    navEl = document.querySelector('.nav'),
+    headerEl = document.querySelector('.header'),
+    // Section 1 (Features)
+    section1 = document.getElementById('section--1'),
+    // Section 2 (Operations)
     tabs = document.querySelectorAll('.operations__tab'),
     tabsContainer = document.querySelector('.operations__tab-container'),
     tabsContent = document.querySelectorAll('.operations__content'),
-    navEl = document.querySelector('.nav'),
-    headerEl = document.querySelector('.header'),
+    // All sections
     allSectionsEl = document.querySelectorAll('.section'),
+    // Testimonials slider
     slidesEl = document.querySelectorAll('.slide'),
     sliderBtnLeft = document.querySelector('.slider__btn--left'),
-    sliderBtnRight = document.querySelector('.slider__btn--right');
+    sliderBtnRight = document.querySelector('.slider__btn--right'),
+    dotContainerEl = document.querySelector('.dots');
 
 // ------------------- //
 // // FUNCTIONS // //
@@ -163,36 +169,87 @@ const imgObserver = new IntersectionObserver(loadImg, {
 
 imgTarget.forEach((img) => imgObserver.observe(img));
 
-// Event Listener: Slider //
-const goToSlide = (slide) => {
-    slidesEl.forEach((s, i) => {
-        s.style.transform = `translateX(${100 * (i - slide)}%)`;
+// Event Listener & Function for slides (testimonials)
+const sliderTestimonials = () => {
+    // Function: Create Dots
+    const createDots = () => {
+        slidesEl.forEach((_, idx) => {
+            dotContainerEl.insertAdjacentHTML(
+                'beforeend',
+                `<button class="dots__dot" data-slide="${idx}"></button>`
+            );
+        });
+    };
+
+    // Function: Activate Dot
+    const activateDot = (slide) => {
+        // Get all dots el
+        const dotsEl = dotContainerEl.querySelectorAll('.dots__dot');
+        // Remove active class from all dots
+        dotsEl.forEach((dot) => {
+            dot.classList.remove('dots__dot--active');
+        });
+        // Add active class to selected
+        document
+            .querySelector(`.dots__dot[data-slide="${slide}"]`)
+            .classList.add('dots__dot--active');
+    };
+
+    // Function: Go to slide
+    const goToSlide = (slide) => {
+        slidesEl.forEach((s, i) => {
+            s.style.transform = `translateX(${100 * (i - slide)}%)`;
+        });
+        activateDot(slide);
+    };
+
+    // Function: Slider init fn
+    const sliderInit = () => {
+        createDots();
+        goToSlide(0);
+    };
+    sliderInit();
+
+    // State variables
+    let currentSlide = 0;
+    const maxSlide = slidesEl.length;
+
+    // Function: Go to next slide
+    const goToNextSlide = () => {
+        if (currentSlide === maxSlide - 1) currentSlide = 0;
+        else currentSlide++;
+        // Go to slide
+        goToSlide(currentSlide);
+    };
+
+    // Function: Go to previous slide
+    const goToPrevSlide = () => {
+        if (currentSlide === 0) currentSlide = maxSlide - 1;
+        else currentSlide--;
+        // Go to slide
+        goToSlide(currentSlide);
+    };
+
+    // Event Listener: Go to next slide
+    sliderBtnRight.addEventListener('click', goToNextSlide);
+
+    // Event Listener: Go to previous slide
+    sliderBtnLeft.addEventListener('click', goToPrevSlide);
+
+    // Event Listener: Go to next/prev slide on key press
+    document.addEventListener('keyup', (e) => {
+        if (e.key === 'ArrowLeft') goToPrevSlide();
+        if (e.key === 'ArrowRight') goToNextSlide();
+    });
+
+    // Event Listener: Slider dots click event
+    dotContainerEl.addEventListener('click', (e) => {
+        if (e.target.classList.contains('dots__dot')) {
+            const { slide } = e.target.dataset;
+            goToSlide(slide);
+            activateDot(slide);
+        }
     });
 };
-goToSlide(0);
 
-// State variables
-let currentSlide = 0;
-const maxSlide = slidesEl.length;
-
-// Function: Go to next slide
-const goToNextSlide = () => {
-    if (currentSlide === maxSlide - 1) currentSlide = 0;
-    else currentSlide++;
-    // Go to slide
-    goToSlide(currentSlide);
-};
-
-// Function: Go to previous slide
-const goToPrevSlide = () => {
-    if (currentSlide === 0) currentSlide = maxSlide - 1;
-    else currentSlide--;
-    // Go to slide
-    goToSlide(currentSlide);
-};
-
-// Event Listener: Go to next slide
-sliderBtnRight.addEventListener('click', goToNextSlide);
-
-// Go to previous slide
-sliderBtnLeft.addEventListener('click', goToPrevSlide);
+sliderTestimonials();
