@@ -13,7 +13,10 @@ const modal = document.querySelector('.modal'),
     tabsContent = document.querySelectorAll('.operations__content'),
     navEl = document.querySelector('.nav'),
     headerEl = document.querySelector('.header'),
-    allSectionsEl = document.querySelectorAll('.section');
+    allSectionsEl = document.querySelectorAll('.section'),
+    slidesEl = document.querySelectorAll('.slide'),
+    sliderBtnLeft = document.querySelector('.slider__btn--left'),
+    sliderBtnRight = document.querySelector('.slider__btn--right');
 
 // ------------------- //
 // // FUNCTIONS // //
@@ -88,7 +91,7 @@ tabsContainer.addEventListener('click', function (e) {
         .classList.add('operations__content--active');
 });
 
-// Event Listener & Function: Nav menu fade animation
+// Event Listener & Function: Nav menu fade animation //
 const handleHover = (event, opacity) => {
     if (event.target.classList.contains('nav__link')) {
         const link = event.target;
@@ -120,7 +123,7 @@ const headerObserver = new IntersectionObserver(stickyNav, {
 });
 headerObserver.observe(headerEl);
 
-// Event Listener: Section load/reveal animation
+// Event Listener: Section load/reveal animation //
 const revealSection = (entries, observer) => {
     const [entry] = entries;
     if (!entry.isIntersecting) return;
@@ -135,10 +138,10 @@ const sectionObserver = new IntersectionObserver(revealSection, {
 
 allSectionsEl.forEach((sec) => {
     sectionObserver.observe(sec);
-    sec.classList.add('section--hidden');
+    // sec.classList.add('section--hidden');
 });
 
-// Event: Lazy loading images
+// Event: Lazy loading images //
 const imgTarget = document.querySelectorAll('img[data-src]');
 
 const loadImg = (entries, observer) => {
@@ -159,3 +162,37 @@ const imgObserver = new IntersectionObserver(loadImg, {
 });
 
 imgTarget.forEach((img) => imgObserver.observe(img));
+
+// Event Listener: Slider //
+const goToSlide = (slide) => {
+    slidesEl.forEach((s, i) => {
+        s.style.transform = `translateX(${100 * (i - slide)}%)`;
+    });
+};
+goToSlide(0);
+
+// State variables
+let currentSlide = 0;
+const maxSlide = slidesEl.length;
+
+// Function: Go to next slide
+const goToNextSlide = () => {
+    if (currentSlide === maxSlide - 1) currentSlide = 0;
+    else currentSlide++;
+    // Go to slide
+    goToSlide(currentSlide);
+};
+
+// Function: Go to previous slide
+const goToPrevSlide = () => {
+    if (currentSlide === 0) currentSlide = maxSlide - 1;
+    else currentSlide--;
+    // Go to slide
+    goToSlide(currentSlide);
+};
+
+// Event Listener: Go to next slide
+sliderBtnRight.addEventListener('click', goToNextSlide);
+
+// Go to previous slide
+sliderBtnLeft.addEventListener('click', goToPrevSlide);
