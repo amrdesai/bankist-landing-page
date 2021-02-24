@@ -144,7 +144,7 @@ const sectionObserver = new IntersectionObserver(revealSection, {
 
 allSectionsEl.forEach((sec) => {
     sectionObserver.observe(sec);
-    // sec.classList.add('section--hidden');
+    sec.classList.add('section--hidden');
 });
 
 // Event: Lazy loading images //
@@ -251,5 +251,4 @@ const sliderTestimonials = () => {
         }
     });
 };
-
 sliderTestimonials();
